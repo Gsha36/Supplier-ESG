@@ -11,12 +11,18 @@ dotenv.config({ path: './config.env' });
 // }); 
 
 
-mongoose
-  .connect(process.env.DATABASE)
-  .then(() => console.log("DB connection successfully!"));
+ try {
+   const connectionInstance = await mongoose.connect(process.env.DATABASE);
+   console.log(
+     `\nDatabase connection successful!\nDB HOST: ${connectionInstance.connection.host}`
+   );
+ } catch (error) {
+   console.log("Database connection failed\n", error);
+   process.exit(1);
+ }
 
 const port = process.env.PORT || 8000;
-console.log(port);
+// console.log(port);
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });

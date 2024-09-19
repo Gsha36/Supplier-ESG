@@ -35,10 +35,8 @@ export const signup = expressAsyncHandler(async (req, res, next) => {
 
   if (existedUser) {
     return next(
-      new AppError(
-        "User with this username and email already exists",  
-        409  
-      )
+      new AppError("User with this username and email already exists", 409),
+      console.log("User with this username and email already exists")
     );
   }
 
@@ -57,17 +55,14 @@ export const signup = expressAsyncHandler(async (req, res, next) => {
 export const login = expressAsyncHandler(async (req, res, next) => {
   const { username, password } = req.body;
   // 1) Check if email and password exist
- if (!username || !password || !role) {
-   return next(
-     new AppError("Please provide username, password, and role", 400)
-   );
- }
+  if (!username || !password) {
+    return next(new AppError("Please provide username, password", 400));
+  }
 
- // Find the user by username, and explicitly select all fields including password
- const user = await User.findOne({ username, role })
-   .select("+password")
-   .populate("company")
-//    .populate("esgReport");
+  // Find the user by username, and explicitly select all fields including password
+  const user = await User.findOne({ username }).select("+password");
+  // .populate("company");
+  //    .populate("esgReport");
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError("Incorrect username or password", 401));

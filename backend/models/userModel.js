@@ -1,4 +1,3 @@
-
 // userModel.js
 import mongoose, { Schema } from "mongoose";
 import jwt from "jsonwebtoken";
@@ -23,7 +22,7 @@ const userSchema = new Schema(
     phoneNumber: {
       type: String,
       trim: true,
-      required: true, 
+      required: true,
       validate: {
         validator: function (v) {
           // Validator for phone number to ensure it contains only digits and is 10 digits long
@@ -42,7 +41,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["SuperUser", "Admin", "FacAdmin", "Employee"],
+      enum: ["SuperUser", "Admin", "Employee", "Supplier"],
       required: true,
       trim: true,
     },
@@ -53,6 +52,10 @@ const userSchema = new Schema(
     company: {
       type: Schema.Types.ObjectId,
       ref: "Company",
+    },
+    supplier: {
+      type: Schema.Types.ObjectId,
+      ref: "Supplier",
     },
     permissions: {
       type: [String], // Permissions as an array of strings
@@ -65,8 +68,6 @@ const userSchema = new Schema(
 );
 
 // Password hashing and token generation methods remain the same
-
-
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
@@ -78,6 +79,24 @@ userSchema.pre("save", async function (next) {
   }
 });
 
+userSchema.pre(/^find/, function (next) {
+  // If the role is Admin or Employee, populate the company field
+  if (["Admin", "Employee"].includes(this.role)) {
+    this.populate({
+      path: "company",
+      select: "supplierESGScore companyID", // Select any fields you want to populate, modify as needed
+    });
+  }
+
+  // If the role is Supplier, populate the supplier field
+  if (this.role === "Supplier") {
+    this.populate({
+      path: "supplier",
+      select: "supplierID ESGScore", // Select any fields you want to populate, modify as needed
+    });
+  }
+  next();
+});
 
 userSchema.methods.correctPassword = async function (
   candidatePassword,
@@ -114,30 +133,5 @@ userSchema.methods.createPasswordResetToken = function () {
 
   return resetToken;
 };
-
-
-// userSchema.methods.generateAccessToken = function () {
-//   return jwt.sign(
-//     {
-//       _id: this._id,
-//     },
-//     process.env.ACCESS_TOKEN_SECRET,
-//     {
-//       expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
-//     }
-//   );
-// };
-
-// userSchema.methods.generateRefreshToken = function () {
-//   return jwt.sign(
-//     {
-//       _id: this._id,
-//     },
-//     process.env.REFRESH_TOKEN_SECRET,
-//     {
-//       expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
-//     }
-//   );
-// };
 
 export const User = mongoose.model("User", userSchema);
