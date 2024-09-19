@@ -3,7 +3,14 @@ import mongoose, { Schema } from "mongoose";
 // Define the Company schema
 const companySchema = new Schema(
   {
-    name: {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      index: true,
+    },
+    companyName: {
       type: String,
       required: true,
       trim: true,

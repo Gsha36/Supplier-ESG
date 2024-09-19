@@ -68,6 +68,7 @@ export const login = expressAsyncHandler(async (req, res, next) => {
     return next(new AppError("Incorrect username or password", 401));
   }
 
+  req.user = user;
   // 3) If everything ok, send token to client
   createSendToken(user, 200, res);
 });

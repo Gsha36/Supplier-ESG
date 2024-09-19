@@ -92,7 +92,7 @@ userSchema.pre(/^find/, function (next) {
   if (this.role === "Supplier") {
     this.populate({
       path: "supplier",
-      select: "supplierID ESGScore", // Select any fields you want to populate, modify as needed
+      select: "ESGScore", // Select any fields you want to populate, modify as needed
     });
   }
   next();

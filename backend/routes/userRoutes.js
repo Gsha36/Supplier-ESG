@@ -8,7 +8,7 @@ import {
   signup,
   updatePassword,
 } from "../controllers/authController.js";
-// import userController from "./../controllers/userController.js";
+import { updateSupplierInfo } from "../controllers/userController.js";
 
 const router = express.Router();
 
@@ -16,17 +16,18 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/forgotPassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);
+router.post("/updateSupplierInfo", updateSupplierInfo);
 
 // Protect all routes after this middleware
 router.use(protect);
 
-// router.patch("/updateMyPassword", updatePassword);
+router.patch("/updateMyPassword", updatePassword);
 // router.get("/me", userController.getMe, userController.getUser);
 // router.patch("/updateMe", userController.updateMe);
 // router.delete("/deleteMe", userController.deleteMe);
 // router.get("/bookings", userController.getUserBookings);
 
-router.use(restrictTo("admin"));
+router.use(restrictTo("SuperUser"));
 
 // router
 //   .route("/")
