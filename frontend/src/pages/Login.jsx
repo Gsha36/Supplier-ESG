@@ -13,7 +13,11 @@ const LoginFlow = ({ baseURL }) => {
 
   const handleLogin = async (username, password) => {
     try {
-      const response = await axios.post(`${baseURL}/login`, { username, password, role });
+      const response = await axios.post(`${baseURL}/api/v1/users/login`, {
+        username,
+        password,
+        role,
+      });
       localStorage.setItem('token', response.data.data.accessToken);
       setIsLoggedIn(true);
       // Navigate to appropriate dashboard based on role
@@ -58,6 +62,7 @@ const LoginFlow = ({ baseURL }) => {
                   {r}
                 </button>
               ))}
+              
             </div>
             {renderRoleBasedComponent()}
           </>

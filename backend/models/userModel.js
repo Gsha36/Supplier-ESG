@@ -45,6 +45,30 @@ const userSchema = new Schema(
       required: true,
       trim: true,
     },
+    ownPassword: {
+      type: Boolean,
+      default: false,
+      validate: {
+        validator: function () {
+          // Validate that ownPassword is only set for "Admin", "Employee", or "Supplier"
+          return ["Admin", "Employee", "Supplier"].includes(this.role);
+        },
+        message:
+          "ownPassword can only be set for Admin, Employee, or Supplier roles.",
+      },
+    },
+    allData: {
+      type: Boolean,
+      default: false,
+      validate: {
+        validator: function () {
+          // Validate that allData is only set for "Admin", "Employee", or "Supplier"
+          return ["Admin", "Employee", "Supplier"].includes(this.role);
+        },
+        message:
+          "allData can only be set for Admin, Employee, or Supplier roles.",
+      },
+    },
     photo: {
       type: String,
       trim: true,

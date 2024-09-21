@@ -1,18 +1,13 @@
 import mongoose, { Schema } from "mongoose";
+import validator from "validator";
 
 // Define the Company schema
 const companySchema = new Schema(
   {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true,
-      index: true,
-    },
     companyName: {
       type: String,
       required: true,
+      unique: true,
       trim: true,
     },
     companyID: {

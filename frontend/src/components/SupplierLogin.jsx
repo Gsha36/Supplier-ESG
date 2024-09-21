@@ -12,8 +12,13 @@ const SupplierLogin = ({ baseURL }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${baseURL}/login`, { username, password, role: 'Supplier' });
+      const response = await axios.post(`${baseURL}/api/v1/users/login`, {
+        username,
+        password,
+        role: "Supplier",
+      });
       localStorage.setItem('token', response.data.data.accessToken);
+      console.log("")
       if (!response.data.data.user.passwordChangedAt) {
         setMustChangePassword(true);
       } else {
@@ -26,9 +31,13 @@ const SupplierLogin = ({ baseURL }) => {
 
   const handleChangePassword = async () => {
     try {
-      await axios.patch(`${baseURL}/updateMyPassword`, { password: newPassword }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
+      await axios.patch(
+        `${baseURL}/api/v1/users/updateMyPassword`,
+        { password: newPassword },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setMustChangePassword(false);
       setIsLoggedIn(true);
     } catch (error) {

@@ -3,6 +3,7 @@ import {
   forgotPassword,
   login,
   protect,
+  regiserCompany,
   resetPassword,
   restrictTo,
   signup,
@@ -14,6 +15,7 @@ const router = express.Router();
 
 router.post("/signup", signup);
 router.post("/login", login);
+router.post("/company/register", regiserCompany);
 router.post("/forgotPassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);
 router.post("/updateSupplierInfo", updateSupplierInfo);

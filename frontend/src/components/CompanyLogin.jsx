@@ -10,7 +10,11 @@ const CompanyLogin = ({ baseURL }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${baseURL}/login`, { username, password, role: 'Company' });
+      const response = await axios.post(`${baseURL}/api/v1/users/login`, {
+        username,
+        password,
+        role: "Company",
+      });
       localStorage.setItem('token', response.data.data.accessToken);
       setIsLoggedIn(true);
     } catch (error) {
