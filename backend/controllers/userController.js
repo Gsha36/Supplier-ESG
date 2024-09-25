@@ -7,7 +7,7 @@ export const updateSupplierInfo = expressAsyncHandler(
   async (req, res, next) => {
     const { username, address, total_revenue, panCard, GSTNo, suppliesTo } =
       req.body;
-
+    console.log("req.body", req.body);
     // 1. Check if the username is provided
     if (!username) {
       return next(new AppError("Username is required", 400));
@@ -26,6 +26,8 @@ export const updateSupplierInfo = expressAsyncHandler(
     try {
       // 3. Check if supplier with the username exists
       let supplier = await Supplier.findOne({ username });
+      console.log("yehi tak tha jo tha");
+      // console.log("supp", supplier)
 
       if (supplier) {
         // 4. Update supplier if it exists
@@ -34,7 +36,7 @@ export const updateSupplierInfo = expressAsyncHandler(
         if (panCard !== undefined) supplier.panCard = panCard;
         if (GSTNo !== undefined) supplier.GSTNo = GSTNo;
         if (suppliesTo !== undefined) supplier.suppliesTo = suppliesTo;
-
+        console.log("yehi se return ho gys");
         // 5. Check if all fields are set to update `allData` in the user document
         if (address && total_revenue && panCard && GSTNo && suppliesTo) {
           const user = await User.findOne({ username });
@@ -58,6 +60,15 @@ export const updateSupplierInfo = expressAsyncHandler(
       }
 
       // 7. If supplier does not exist, create a new one
+      console.log(
+        "yha tak hua",
+        username,
+        address,
+        total_revenue,
+        panCard,
+        GSTNo,
+        suppliesTo
+      );
       supplier = await Supplier.create({
         username,
         address,
@@ -66,10 +77,13 @@ export const updateSupplierInfo = expressAsyncHandler(
         GSTNo,
         suppliesTo,
       });
+      console.log("supplier", supplier)
 
       // 8. After creating the supplier, find the user and update `allData`
       const user = await User.findOne({ username });
+      console.log("user", user)
       if (user) {
+        console.log("user", user)
         user.allData = true;
         await user.save();
       }
@@ -84,6 +98,7 @@ export const updateSupplierInfo = expressAsyncHandler(
       });
     } catch (error) {
       // 10. Handle database errors or unexpected issues
+      console.log("error", error, error.message);
       return next(
         new AppError(
           "Error updating or creating supplier. Please try again later.",

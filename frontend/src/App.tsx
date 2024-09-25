@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "./context/AuthContext.tsx";
 import { Navigate, useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./auth/Login";
+import Login from "./auth/Login.tsx";
 import Register from "./auth/Register.tsx";
-import CompanyDashboard from "./components/Dashboards/CompanyDashboard";
-import SupplierDashboard from "./components/Dashboards/SupplierDashboard";
-import AdminDashboard from "./components/Dashboards/AdminDashboard";
+import CompanyDashboard from "./components/Dashboards/CompanyDashboard.tsx";
+import SupplierDashboard from "./components/Dashboards/SupplierDashboard.tsx";
+import AdminDashboard from "./components/Dashboards/AdminDashboard.tsx";
+import HomePage from "./homePage/HomePage.tsx";
 
 const ProtectedRoute = ({
   children,
@@ -57,13 +58,12 @@ const ProtectedRoute = ({
   return children;
 };
 
-
-
 const App = () => {
   return (
     <ToastProvider>
       <Router>
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 

@@ -4,6 +4,9 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
 
+const ENTITY_ENUM = ["ESG report", "Questions"];
+const ACTIONS_ENUM = ["read", "create", "update", "delete"];
+
 const userSchema = new Schema(
   {
     username: {
@@ -81,10 +84,12 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Supplier",
     },
-    permissions: {
-      type: [String], // Permissions as an array of strings
-      default: [], // Default to an empty array
-    },
+    permissions: [
+      {
+        entity: { type: String, enum: ENTITY_ENUM },
+        actions: { type: [String], enum: ACTIONS_ENUM },
+      },
+    ],
   },
   {
     timestamps: true,

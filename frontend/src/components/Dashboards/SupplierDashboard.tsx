@@ -18,21 +18,26 @@ import {
 import { ToastProvider } from "@/components/ui/toast";
 import { ToastAction } from "@radix-ui/react-toast";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon } from "lucide-react"; // Use any icon library you like
+import { CalendarIcon } from "lucide-react";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
+import Questions from "../SupplierQuestions/EnvironmentalQuestions";
+
+
 
 const SupplierDashboard: React.FC = () => {
   const { user, login } = useAuth();
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [address, setAddress] = useState("");
-  const [total_revenue, setTotal_revenue] = useState<number | undefined>();
-  const [panCard, setPanCard] = useState("");
-  const [GSTNo, setGSTNo] = useState("");
+  const [address, setAddress] = useState<string>("");
+  const [total_revenue, setTotal_revenue] = useState<number | undefined>(
+    undefined
+  );
+  const [panCard, setPanCard] = useState<string>("");
+  const [GSTNo, setGSTNo] = useState<string>("");
   const [suppliesTo, setSuppliesTo] = useState([
     { companyName: "", date: new Date() },
   ]);
@@ -41,7 +46,8 @@ const SupplierDashboard: React.FC = () => {
   const [error, setError] = useState("");
   const { toast } = useToast();
   axios.defaults.baseURL = "http://127.0.0.1:8000";
-  //   console.log("user", user)
+
+  
 
   const handleDateSelect = (selectedDate: Date | undefined, index: number) => {
     setSuppliesTo(
@@ -64,7 +70,7 @@ const SupplierDashboard: React.FC = () => {
           password: newPassword,
         }
       );
-      console.log("RP", response.data.data);
+
       if (response.status === 200) {
         const { user: updatedUser, accessToken } = response.data.data;
         login(updatedUser, accessToken);
@@ -82,10 +88,10 @@ const SupplierDashboard: React.FC = () => {
       }
 
       if (response.data.success && user?.allData === false) {
-        setProfileDrawerOpen(true); // Open the profile drawer if needed
-        setPasswordDrawerOpen(false); // Close the password drawer
+        setProfileDrawerOpen(true);
+        setPasswordDrawerOpen(false);
       } else {
-        setPasswordDrawerOpen(false); // Close the password drawer
+        setPasswordDrawerOpen(false);
       }
     } catch (error) {
       toast({
@@ -107,27 +113,18 @@ const SupplierDashboard: React.FC = () => {
         suppliesTo,
         username: user?.username,
       });
-      console.log("US", response.data.data)
-    //   console.log()
-      // Check if the status is 201 (success)
-      if (response.status === 201) {
-          const updatedUser = response.data.data.user;
-          const accessToken = user.accessToken;
-          console.log("ho gya ", accessToken)
 
-        // Log in the user by sending user and token to login from useAuth
+      if (response.status === 201) {
+        const updatedUser = response.data.data.user;
+        const accessToken = user.accessToken;
         login(updatedUser, accessToken);
         toast({
           title: "Success",
-          description:
-            response.data.message || "Supplier info updated successfully",
+          description: "Supplier info updated successfully",
           variant: "default",
         });
-
-        // Close the profile drawer after successful submission
         setProfileDrawerOpen(false);
       } else {
-        // Handle failure response if status is not 201
         toast({
           title: "Failure",
           description: response.data.message || "Supplier info update failed",
@@ -135,7 +132,6 @@ const SupplierDashboard: React.FC = () => {
         });
       }
     } catch (error) {
-      // Error handling for network issues or other exceptions
       toast({
         title: "Error",
         description:
@@ -151,6 +147,8 @@ const SupplierDashboard: React.FC = () => {
   return (
     <div>
       <ToastProvider>
+       <Questions/>
+
         {/* Password Drawer */}
         {user?.ownPassword === false && (
           <Drawer
@@ -251,12 +249,10 @@ const SupplierDashboard: React.FC = () => {
 
                     <Label>Date</Label>
                     <div className="flex items-center space-x-2">
-                      {/* Input field to show selected date */}
                       <Input
                         readOnly
                         value={item.date.toISOString().split("T")[0]} // Show formatted date
                       />
-                      {/* Popover for calendar */}
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button variant="outline">
