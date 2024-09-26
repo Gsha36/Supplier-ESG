@@ -68,6 +68,12 @@ const SupplierDashboard: React.FC = () => {
         `/api/v1/users/resetPassword/${user?.accessToken}`,
         {
           password: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`,  
+          },
+          withCredentials: true, 
         }
       );
 
@@ -105,14 +111,23 @@ const SupplierDashboard: React.FC = () => {
 
   const handleSupplierInfoSubmit = async () => {
     try {
-      const response = await axios.post("/api/v1/users/updateSupplierInfo", {
-        address,
-        total_revenue,
-        panCard,
-        GSTNo,
-        suppliesTo,
-        username: user?.username,
-      });
+      const response = await axios.post(
+        "/api/v1/users/updateSupplierInfo",
+        {
+          address,
+          total_revenue,
+          panCard,
+          GSTNo,
+          suppliesTo,
+          username: user?.username,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`, 
+          },
+          withCredentials: true,  
+        }
+      );
 
       if (response.status === 201) {
         const updatedUser = response.data.data.user;

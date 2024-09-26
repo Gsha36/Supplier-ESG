@@ -72,7 +72,7 @@ const supplierSchema = new Schema(
         },
         timePeriod: {
           type: Date,
-          default: Date.now, // Set the timePeriod to the current time
+          required: true, 
         },
       },
     ],

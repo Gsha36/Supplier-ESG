@@ -16,14 +16,14 @@ const router = express.Router();
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/company/register", regiserCompany);
-router.post("/forgotPassword", forgotPassword);
-router.patch("/resetPassword/:token", resetPassword);
-router.post("/updateSupplierInfo", updateSupplierInfo);
 
 // Protect all routes after this middleware
 router.use(protect);
 
 router.patch("/updateMyPassword", updatePassword);
+router.post("/forgotPassword", forgotPassword);
+router.patch("/resetPassword/:token", resetPassword);
+router.post("/updateSupplierInfo", updateSupplierInfo);
 // router.get("/me", userController.getMe, userController.getUser);
 // router.patch("/updateMe", userController.updateMe);
 // router.delete("/deleteMe", userController.deleteMe);
