@@ -66,13 +66,105 @@ const supplierSchema = new Schema(
     ],
     questions: [
       {
-        questionJSON: {
-          type: Map, // Using Map to store key-value pairs
-          of: String, // Both the question and answer will be strings
+        environment: {
+          environmentalManagement: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          climateChange: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          airPollution: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          hazardousMaterialManagement: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          naturalResourceManagement: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          wasteManagement: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          regulatoryCompliance: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          pollutionPrevention: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+        },
+        social: {
+          workerHealthSafety: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          humanRightsLabourPractices: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          regulatoryComplianceSocial: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          consumerSafetyProductSafety: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          communityInvolvement: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+        },
+        governance: {
+          supplyChainManagement: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
+          dataPrivacySecurityManagement: [
+            {
+              question: String,
+              answer: String,
+            },
+          ],
         },
         timePeriod: {
           type: Date,
-          required: true, 
+          required: true, // Each entry will have its own time period
         },
       },
     ],

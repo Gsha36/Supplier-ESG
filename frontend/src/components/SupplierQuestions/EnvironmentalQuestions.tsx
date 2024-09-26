@@ -4,7 +4,8 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import SocialQuestion from "./SocialQuestion";
 import GovernanceQuestion from "./GovernanceQuestion";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast"; // Assuming you're using a custom toast hook
+// import { toast } from "sonner";
 import {
   Question,
   EnvironmentalState,
@@ -14,6 +15,8 @@ import {
   GovernanceState,
   initialGovernanceQuestions,
 } from "./types-Question";
+import { useAuth } from "@/context/AuthContext";
+import axios from "axios";
 
 // Define the reducer action types for each category
 type EnvironmentalActionType = {
@@ -101,8 +104,8 @@ const EnvironmentalQuestions = () => {
   const [socialState, dispatchSocial] = useReducer<
     React.Reducer<SocialState, SocialActionType>
   >(socialReducer, initialSocialQuestions);
-
-
+  const { user } = useAuth();
+  const { toast } = useToast();
 
   const checkAllQuestionsAnswered = () => {
     const allAnswered = (questions: Question[]) =>
@@ -127,14 +130,13 @@ const EnvironmentalQuestions = () => {
     );
   };
 
-
-  const handleSubmit = () => {
-    if (!checkAllQuestionsAnswered()) {
-      toast.error(
-        "Please fill all the questions from Environmental, Social, and Governance sections."
-      );
-      return;
-    }
+  const handleSubmit = async () => {
+    // if (!checkAllQuestionsAnswered()) {
+    //   toast.error(
+    //     "Please fill all the questions from Environmental, Social, and Governance sections."
+    //   );
+    //   return;
+    // }
 
     // Combine the states to send to the backend
     const dataToSend = {
@@ -143,8 +145,43 @@ const EnvironmentalQuestions = () => {
       social: socialState,
     };
 
-    console.log("Submitting data to backend:", dataToSend);
-    // e.g., axios.post('/api/save', dataToSend)
+    // Setting the username and timePeriod
+    const username = user?.username; // Assuming user object is available
+    const timePeriod = Date.now(); // Set current time as timePeriod
+
+    try {
+      // Send the data to the backend using axios
+      const response = await axios.post(
+        "/api/v1/supplier/addSupplierQuestion",
+        {
+          dataToSend, // The combined states
+          username, // Username from user object
+          timePeriod, // Current time
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user?.accessToken}`, // Include access token in the Authorization header
+          },
+          withCredentials: true, // Include credentials (cookies) if needed
+        }
+      );
+
+      // Success notification
+      toast({
+        title: "Success",
+        description: "Questions submitted successfully!",
+        variant: "default",
+      });
+      console.log("response", response);
+    } catch (error) {
+      // Error notification
+      console.log("error", error);
+       toast({
+         title: "Failure",
+         description: "Failed to submit the questions. Please try again.",
+         variant: "destructive",
+       });
+    }
   };
 
   const handleAnswerChange = (

@@ -9,7 +9,6 @@ import {
   signup,
   updatePassword,
 } from "../controllers/authController.js";
-import { updateSupplierInfo } from "../controllers/userController.js";
 
 const router = express.Router();
 
@@ -23,7 +22,6 @@ router.use(protect);
 router.patch("/updateMyPassword", updatePassword);
 router.post("/forgotPassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);
-router.post("/updateSupplierInfo", updateSupplierInfo);
 // router.get("/me", userController.getMe, userController.getUser);
 // router.patch("/updateMe", userController.updateMe);
 // router.delete("/deleteMe", userController.deleteMe);

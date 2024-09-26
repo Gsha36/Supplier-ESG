@@ -47,6 +47,7 @@ const SupplierDashboard: React.FC = () => {
   const { toast } = useToast();
   axios.defaults.baseURL = "http://127.0.0.1:8000";
 
+  // console.log("user", user)
   
 
   const handleDateSelect = (selectedDate: Date | undefined, index: number) => {
@@ -112,7 +113,7 @@ const SupplierDashboard: React.FC = () => {
   const handleSupplierInfoSubmit = async () => {
     try {
       const response = await axios.post(
-        "/api/v1/users/updateSupplierInfo",
+        "/api/v1/supplier/updateSupplierInfo",
         {
           address,
           total_revenue,
@@ -123,9 +124,9 @@ const SupplierDashboard: React.FC = () => {
         },
         {
           headers: {
-            Authorization: `Bearer ${user?.accessToken}`, 
+            Authorization: `Bearer ${user?.accessToken}`,
           },
-          withCredentials: true,  
+          withCredentials: true,
         }
       );
 
